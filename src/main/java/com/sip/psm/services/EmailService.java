@@ -19,7 +19,12 @@ public class EmailService {
     @Value("${app.admin.email}")
     private String adminEmail;
 
+    // Compte SMTP (Gmail en local, Brevo sur Render)
     @Value("${spring.mail.username:}")
+    private String username;
+
+    // Adresse d'expéditeur (par défaut : spring.mail.username)
+    @Value("${app.mail.from:${spring.mail.username:}}")
     private String from;
 
     public EmailService(JavaMailSender mailSender) {
@@ -30,7 +35,7 @@ public class EmailService {
     // @Async : l'email part en arrière-plan, l'inscription répond tout de suite.
     @Async
     public void notifierAdminInscription(User user) {
-        if (from == null || from.isBlank()) {
+        if (username == null || username.isBlank()) {
             log.warn("Email NON envoyé : spring.mail.username n'est pas configuré (voir application.properties).");
             return;
         }
