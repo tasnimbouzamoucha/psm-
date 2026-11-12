@@ -1,0 +1,33 @@
+<div class="app-menu navbar-menu">
+  <!-- LOGO -->
+  <div class="navbar-brand-box">
+    <a routerLink="/dashboard" class="logo logo-light">
+      <span class="logo-sm"><i class="ri-briefcase-4-fill fs-22 text-white"></i></span>
+      <span class="logo-lg psm-logo">
+        <i class="ri-briefcase-4-fill"></i> Projects<span class="text-primary-light">Manager</span>
+      </span>
+    </a>
+  </div>
+
+  <div id="scrollbar" class="psm-sidebar-scroll">
+    <div class="container-fluid">
+      <ul class="navbar-nav" id="navbar-nav">
+        @for (item of menuItems(); track item.label) {
+          @if (item.isTitle) {
+            <li class="menu-title"><span>{{ item.label }}</span></li>
+          } @else {
+            <li class="nav-item">
+              <a class="nav-link menu-link" [routerLink]="item.link" routerLinkActive="active"
+                 (click)="closeMobileMenu.emit()">
+                <i [class]="item.icon"></i> <span>{{ item.label }}</span>
+              </a>
+            </li>
+          }
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="sidebar-background"></div>
+</div>
+<!-- Fond sombre derrière le menu sur mobile -->
+<div class="vertical-overlay" (click)="closeMobileMenu.emit()"></div>

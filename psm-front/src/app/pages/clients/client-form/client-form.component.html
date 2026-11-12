@@ -1,0 +1,46 @@
+<app-page-title [title]="isEdit ? 'Modifier le client' : 'Nouveau client'"
+  [breadcrumbs]="[{label:'Clients', link:'/clients'},{label: isEdit ? 'Modifier' : 'Ajouter'}]"></app-page-title>
+
+<div class="row justify-content-center">
+  <div class="col-xxl-8 col-lg-10">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title mb-0"><i class="ri-building-line me-1 align-middle"></i> Informations du client</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Nom <span class="text-danger">*</span></label>
+              <input class="form-control" formControlName="nom" placeholder="Raison sociale ou nom"
+                     [class.is-invalid]="submitted && f['nom'].errors">
+              <div class="invalid-feedback">Le nom est obligatoire</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Téléphone <span class="text-danger">*</span></label>
+              <input class="form-control" formControlName="tel" placeholder="+216 ..."
+                     [class.is-invalid]="submitted && f['tel'].errors">
+              <div class="invalid-feedback">Le téléphone est obligatoire</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Email <span class="text-danger">*</span></label>
+              <input type="email" class="form-control" formControlName="email" placeholder="contact@client.com"
+                     [class.is-invalid]="submitted && f['email'].errors">
+              <div class="invalid-feedback">Email obligatoire et valide</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Adresse</label>
+              <input class="form-control" formControlName="adresse" placeholder="Ville, rue...">
+            </div>
+          </div>
+          <div class="hstack gap-2 justify-content-end mt-2">
+            <a routerLink="/clients" class="btn btn-light">Annuler</a>
+            <button type="submit" class="btn btn-success" [disabled]="saving">
+              <i class="ri-save-line align-bottom me-1"></i> {{ isEdit ? 'Enregistrer' : 'Ajouter' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

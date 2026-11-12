@@ -1,0 +1,64 @@
+<app-page-title [title]="isEdit ? 'Modifier le projet' : 'Nouveau projet'"
+  [breadcrumbs]="[{label:'Projets', link:'/projets'},{label: isEdit ? 'Modifier' : 'Ajouter'}]"></app-page-title>
+
+<div class="row justify-content-center">
+  <div class="col-xxl-8 col-lg-10">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title mb-0"><i class="ri-folder-chart-line me-1 align-middle"></i> Informations du projet</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label class="form-label">Libellé <span class="text-danger">*</span></label>
+            <input class="form-control" formControlName="libelle" placeholder="Nom du projet"
+                   [class.is-invalid]="submitted && f['libelle'].errors">
+            <div class="invalid-feedback">Le libellé est obligatoire</div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Client <span class="text-danger">*</span></label>
+            <select class="form-select" formControlName="idClient" [class.is-invalid]="submitted && f['idClient'].errors">
+              <option [ngValue]="null" disabled>-- Choisir un client --</option>
+              @for (c of clients(); track c.id) { <option [ngValue]="c.id">{{ c.nom }}</option> }
+            </select>
+            <div class="invalid-feedback">Le client est obligatoire</div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Budget (DT) <span class="text-danger">*</span></label>
+              <div class="input-group has-validation">
+                <input type="number" class="form-control" formControlName="budget" placeholder="0"
+                       [class.is-invalid]="submitted && f['budget'].errors">
+                <span class="input-group-text">DT</span>
+                <div class="invalid-feedback">Budget obligatoire (≥ 0)</div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label">Durée (mois) <span class="text-danger">*</span></label>
+              <div class="input-group has-validation">
+                <input type="number" class="form-control" formControlName="duree" placeholder="1"
+                       [class.is-invalid]="submitted && f['duree'].errors">
+                <span class="input-group-text">mois</span>
+                <div class="invalid-feedback">Durée obligatoire (≥ 1)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" rows="4" formControlName="description" placeholder="Description du projet"></textarea>
+          </div>
+
+          <div class="hstack gap-2 justify-content-end">
+            <a routerLink="/projets" class="btn btn-light">Annuler</a>
+            <button type="submit" class="btn btn-success" [disabled]="saving">
+              <i class="ri-save-line align-bottom me-1"></i> {{ isEdit ? 'Enregistrer' : 'Ajouter' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

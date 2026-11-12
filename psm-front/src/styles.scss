@@ -1,0 +1,27 @@
+/* Styles propres à PSM (s'ajoutent au thème Velzon) */
+
+.psm-logo {
+  color: #fff;
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: .3px;
+  i { color: #4b93ff; margin-right: 4px; }
+  .text-primary-light { color: #4b93ff; margin-left: 3px; }
+}
+
+/* menu latéral sans la librairie simplebar */
+.psm-sidebar-scroll {
+  height: calc(100vh - 70px);
+  overflow-y: auto;
+}
+
+.auth-logo-text {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 600;
+  i { color: #4b93ff; }
+}
+
+.table td, .table th { vertical-align: middle; }
+
+.cursor-pointer { cursor: pointer; }

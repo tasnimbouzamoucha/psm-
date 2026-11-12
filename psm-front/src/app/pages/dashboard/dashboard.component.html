@@ -1,0 +1,116 @@
+<app-page-title title="Tableau de bord" [breadcrumbs]="[{label:'PSM'},{label:'Tableau de bord'}]"></app-page-title>
+
+<div class="row mb-3">
+  <div class="col-12">
+    <h4 class="fs-16 mb-1">Bonjour, {{ auth.currentUser()?.prenom }} !</h4>
+    <p class="text-muted mb-0">Voici un aperçu de vos clients et projets.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xl-3 col-md-6">
+    <div class="card card-animate">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="flex-grow-1 overflow-hidden">
+            <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Clients</p>
+          </div>
+        </div>
+        <div class="d-flex align-items-end justify-content-between mt-4">
+          <div>
+            <h4 class="fs-22 fw-semibold ff-secondary mb-4">{{ clients().length }}</h4>
+            <a routerLink="/clients" class="text-decoration-underline">Voir les clients</a>
+          </div>
+          <div class="avatar-sm flex-shrink-0">
+            <span class="avatar-title bg-soft-primary rounded fs-3 text-primary"><i class="ri-building-line"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-6">
+    <div class="card card-animate">
+      <div class="card-body">
+        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Projets</p>
+        <div class="d-flex align-items-end justify-content-between mt-4">
+          <div>
+            <h4 class="fs-22 fw-semibold ff-secondary mb-4">{{ projets().length }}</h4>
+            <a routerLink="/projets" class="text-decoration-underline">Voir les projets</a>
+          </div>
+          <div class="avatar-sm flex-shrink-0">
+            <span class="avatar-title bg-soft-success rounded fs-3 text-success"><i class="ri-folder-chart-line"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-6">
+    <div class="card card-animate">
+      <div class="card-body">
+        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Budget total</p>
+        <div class="d-flex align-items-end justify-content-between mt-4">
+          <div>
+            <h4 class="fs-22 fw-semibold ff-secondary mb-4">{{ budgetTotal() | number:'1.0-0' }} DT</h4>
+            <span class="text-muted">Tous projets confondus</span>
+          </div>
+          <div class="avatar-sm flex-shrink-0">
+            <span class="avatar-title bg-soft-warning rounded fs-3 text-warning"><i class="ri-money-dollar-circle-line"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xl-3 col-md-6">
+    <div class="card card-animate">
+      <div class="card-body">
+        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">Durée moyenne</p>
+        <div class="d-flex align-items-end justify-content-between mt-4">
+          <div>
+            <h4 class="fs-22 fw-semibold ff-secondary mb-4">{{ dureeMoyenne() | number:'1.0-1' }} mois</h4>
+            <span class="text-muted">Par projet</span>
+          </div>
+          <div class="avatar-sm flex-shrink-0">
+            <span class="avatar-title bg-soft-info rounded fs-3 text-info"><i class="ri-time-line"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header align-items-center d-flex">
+        <h4 class="card-title mb-0 flex-grow-1">Derniers projets</h4>
+        <a routerLink="/projets/new" class="btn btn-soft-success btn-sm"><i class="ri-add-line align-middle"></i> Nouveau projet</a>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-borderless table-centered align-middle table-nowrap mb-0">
+            <thead class="text-muted table-light">
+              <tr><th>Projet</th><th>Client</th><th>Budget</th><th>Durée</th></tr>
+            </thead>
+            <tbody>
+              @for (p of derniersProjets(); track p.id) {
+                <tr>
+                  <td class="fw-medium">{{ p.libelle }}</td>
+                  <td>{{ p.client?.nom }}</td>
+                  <td><span class="text-success">{{ p.budget | number:'1.0-2' }} DT</span></td>
+                  <td>{{ p.duree }} mois</td>
+                </tr>
+              } @empty {
+                <tr><td colspan="4" class="text-center text-muted py-4">
+                  {{ loading() ? 'Chargement...' : 'Aucun projet pour le moment' }}
+                </td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

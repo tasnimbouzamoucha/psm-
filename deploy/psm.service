@@ -1,0 +1,23 @@
+# /etc/systemd/system/psm.service
+# Lance psm.jar comme un service Linux (redémarre automatiquement)
+[Unit]
+Description=PSM - Projects Manager (Spring Boot + Angular)
+After=network.target mysql.service
+
+[Service]
+User=psm
+WorkingDirectory=/opt/psm
+# Variables à adapter
+Environment=DB_USERNAME=psm
+Environment=DB_PASSWORD=MotDePasseMySQL
+Environment=JWT_SECRET=REMPLACE_PAR_UNE_CLE_BASE64_LONGUE
+Environment=MAIL_USERNAME=ton.adresse@gmail.com
+Environment=MAIL_PASSWORD=motdepasseapplicationgmail
+Environment=ADMIN_EMAIL=admin@tondomaine.com
+ExecStart=/usr/bin/java -jar /opt/psm/psm.jar --spring.profiles.active=prod
+SuccessExitStatus=143
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
