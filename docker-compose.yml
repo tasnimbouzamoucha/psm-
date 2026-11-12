@@ -1,0 +1,32 @@
+services:
+  # Conteneur 1 : la base de données MySQL 8
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_DATABASE: psm_db
+      MYSQL_USER: psm
+      MYSQL_PASSWORD: psm123
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - psm-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 5s
+      retries: 30
+
+  # Conteneur 2 : l'application Spring Boot + Angular
+  app:
+    build: .
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/psm_db?useSSL=false&allowPublicKeyRetrieval=true
+      DB_USERNAME: psm
+      DB_PASSWORD: psm123
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: on-failure
+
+volumes:
+  psm-data:
