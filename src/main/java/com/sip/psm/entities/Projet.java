@@ -1,5 +1,7 @@
 package com.sip.psm.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 @Entity
@@ -26,6 +28,16 @@ public class Projet {
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
+    // Cahier des charges du projet (PDF stocké dans la table fichiers)
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "cahier_charges_id")
+    private Fichier cahierCharges;
+
+    // Nom du PDF, gardé ici pour l'afficher sans charger tout le fichier
+    @Column(name = "cahier_charges_nom")
+    private String cahierChargesNom;
+
     public Projet() {}
 
     public Long getId() { return id; }
@@ -45,4 +57,13 @@ public class Projet {
 
     public Client getClient() { return client; }
     public void setClient(Client client) { this.client = client; }
+
+    public Fichier getCahierCharges() { return cahierCharges; }
+    public void setCahierCharges(Fichier cahierCharges) { this.cahierCharges = cahierCharges; }
+
+    public String getCahierChargesNom() { return cahierChargesNom; }
+    public void setCahierChargesNom(String cahierChargesNom) { this.cahierChargesNom = cahierChargesNom; }
+
+    @JsonProperty(value = "hasCahierCharges", access = JsonProperty.Access.READ_ONLY)
+    public boolean hasCahierCharges() { return cahierCharges != null; }
 }

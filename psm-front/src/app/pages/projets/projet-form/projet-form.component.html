@@ -51,9 +51,44 @@
             <textarea class="form-control" rows="4" formControlName="description" placeholder="Description du projet"></textarea>
           </div>
 
+          <!-- Cahier des charges (PDF) -->
+          <div class="mb-3">
+            <label class="form-label">Cahier des charges (PDF)</label>
+
+            @if (cahierActuelNom && !supprimerCahier && !pdfFile) {
+              <div class="d-flex align-items-center p-2 border rounded mb-2 bg-light">
+                <i class="ri-file-pdf-line fs-3 text-danger me-2"></i>
+                <span class="flex-grow-1 text-truncate">{{ cahierActuelNom }}</span>
+                <button type="button" class="btn btn-sm btn-soft-primary me-1" (click)="voirPdfActuel()">
+                  <i class="ri-eye-line align-bottom"></i> Voir</button>
+                <button type="button" class="btn btn-sm btn-soft-danger" (click)="supprimerCahier = true">
+                  <i class="ri-delete-bin-line align-bottom"></i> Retirer</button>
+              </div>
+            }
+
+            <input #pdfInput type="file" class="form-control" id="cahier" accept="application/pdf,.pdf"
+                   (change)="onPdfChange($event)">
+            <div class="form-text">PDF uniquement — 5 Mo maximum.
+              @if (cahierActuelNom) { Choisir un fichier remplace le PDF actuel. }</div>
+
+            @if (pdfFile) {
+              <div class="d-flex align-items-center mt-2 fs-13">
+                <i class="ri-file-pdf-line text-danger me-1"></i>
+                <span class="flex-grow-1">{{ pdfFile.name }} ({{ tailleMo(pdfFile) }} Mo)</span>
+                <a href="javascript:void(0)" class="text-danger" (click)="annulerPdf(pdfInput)">Annuler</a>
+              </div>
+            }
+            @if (pdfErreur) { <div class="text-danger fs-12 mt-1">{{ pdfErreur }}</div> }
+            @if (supprimerCahier) {
+              <div class="text-warning fs-12 mt-1">Le PDF actuel sera retiré à l'enregistrement.
+                <a href="javascript:void(0)" (click)="supprimerCahier = false">Annuler</a></div>
+            }
+          </div>
+
           <div class="hstack gap-2 justify-content-end">
             <a routerLink="/projets" class="btn btn-light">Annuler</a>
             <button type="submit" class="btn btn-success" [disabled]="saving">
+              @if (saving) { <span class="spinner-border spinner-border-sm me-1"></span> }
               <i class="ri-save-line align-bottom me-1"></i> {{ isEdit ? 'Enregistrer' : 'Ajouter' }}
             </button>
           </div>

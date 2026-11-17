@@ -36,17 +36,28 @@
         <div class="table-responsive table-card">
           <table class="table align-middle table-nowrap mb-0">
             <thead class="table-light text-muted">
-              <tr><th>#</th><th>Libellé</th><th>Client</th><th>Budget</th><th>Durée</th><th>Description</th><th class="text-end">Actions</th></tr>
+              <tr><th>#</th><th>Libellé</th><th>Client</th><th>Budget</th><th>Durée</th><th>Description</th><th>Cahier des charges</th><th class="text-end">Actions</th></tr>
             </thead>
             <tbody>
               @for (p of filtered(); track p.id) {
                 <tr>
                   <td class="text-muted">{{ p.id }}</td>
                   <td class="fw-medium">{{ p.libelle }}</td>
-                  <td><a [routerLink]="['/clients', p.client?.id]" class="link-primary">{{ p.client?.nom }}</a></td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <app-client-logo [client]="p.client" [size]="28"></app-client-logo>
+                      <a [routerLink]="['/clients', p.client?.id]" class="link-primary">{{ p.client?.nom }}</a>
+                    </div>
+                  </td>
                   <td><span class="badge bg-soft-success text-success fs-12">{{ p.budget | number:'1.0-2' }} DT</span></td>
                   <td>{{ p.duree }} mois</td>
                   <td class="text-muted text-truncate" style="max-width: 260px" [title]="p.description">{{ p.description }}</td>
+                  <td>
+                    @if (p.hasCahierCharges) {
+                      <button class="btn btn-sm btn-soft-danger" (click)="ouvrirPdf(p)" [title]="p.cahierChargesNom ?? ''">
+                        <i class="ri-file-pdf-line align-bottom"></i> PDF</button>
+                    } @else { <span class="text-muted">—</span> }
+                  </td>
                   <td class="text-end">
                     @if (auth.isAdmin()) {
                       <a [routerLink]="['/projets/edit', p.id]" class="btn btn-sm btn-soft-info me-1" title="Modifier">
@@ -59,7 +70,7 @@
                   </td>
                 </tr>
               } @empty {
-                <tr><td colspan="7" class="text-center py-5">
+                <tr><td colspan="8" class="text-center py-5">
                   @if (loading()) { <div class="spinner-border text-primary"></div> }
                   @else { <i class="ri-search-line fs-1 text-muted"></i><h5 class="mt-2">Aucun projet trouvé</h5> }
                 </td></tr>

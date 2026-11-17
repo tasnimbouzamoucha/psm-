@@ -55,6 +55,9 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
+                // Logos des clients : publics (affichés directement dans <img src="...">)
+                .requestMatchers(HttpMethod.GET, "/api/clients/*/logo").permitAll()
+
                 // Collaborateur : consulter + ajouter des clients / projets
                 .requestMatchers(HttpMethod.GET, "/api/clients/**", "/api/projets/**").hasAnyRole("ADMIN", "COLLABORATEUR")
                 .requestMatchers(HttpMethod.POST, "/api/clients/**", "/api/projets/**").hasAnyRole("ADMIN", "COLLABORATEUR")

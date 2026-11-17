@@ -1,6 +1,7 @@
 package com.sip.psm.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -33,6 +34,13 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Projet> projets = new ArrayList<>();
 
+    // Logo du client (image stockée dans la table fichiers).
+    // LAZY : l'image n'est chargée que lorsqu'on la demande (GET /api/clients/{id}/logo).
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "logo_id")
+    private Fichier logo;
+
     public Client() {}
 
     public Long getId() { return id; }
@@ -52,4 +60,11 @@ public class Client {
 
     public List<Projet> getProjets() { return projets; }
     public void setProjets(List<Projet> projets) { this.projets = projets; }
+
+    public Fichier getLogo() { return logo; }
+    public void setLogo(Fichier logo) { this.logo = logo; }
+
+    // Renvoyé dans le JSON : indique au front s'il doit afficher le logo
+    @JsonProperty(value = "hasLogo", access = JsonProperty.Access.READ_ONLY)
+    public boolean hasLogo() { return logo != null; }
 }

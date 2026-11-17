@@ -7,6 +7,8 @@ export interface Projet {
   duree: number;        // en mois
   description: string;
   client?: Client;
+  hasCahierCharges?: boolean;     // un PDF est-il attaché ?
+  cahierChargesNom?: string | null; // nom du PDF
 }
 
 // Corps envoyé à l'API pour créer / modifier un projet

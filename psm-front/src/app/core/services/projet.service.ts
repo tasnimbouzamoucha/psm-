@@ -30,4 +30,43 @@ export class ProjetService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}/${id}`);
   }
+
+  // ---------- Cahier des charges (PDF) ----------
+
+  uploadCahierCharges(id: number, file: File): Observable<Projet> {
+    const form = new FormData();
+    form.append('file', file);
+    return this.http.post<Projet>(`${this.api}/${id}/cahier-charges`, form);
+  }
+
+  // Le PDF est protégé par le token : on le télécharge avec HttpClient (l'interceptor
+  // ajoute le token), puis on l'affiche dans un nouvel onglet.
+  getCahierCharges(id: number): Observable<Blob> {
+    return this.http.get(`${this.api}/${id}/cahier-charges`, { responseType: 'blob' });
+  }
+
+  deleteCahierCharges(id: number): Observable<Projet> {
+    return this.http.delete<Projet>(`${this.api}/${id}/cahier-charges`);
+  }
+
+  // Ouvre le PDF dans un nouvel onglet.
+  // L'onglet est ouvert AVANT le téléchargement, sinon le navigateur le bloque (pop-up).
+  ouvrirCahierCharges(id: number, onError: (err: unknown) => void): void {
+    const onglet = window.open('', '_blank');
+    this.getCahierCharges(id).subscribe({
+      next: blob => {
+        const url = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+        if (onglet) {
+          onglet.location.href = url;
+        } else {
+          window.location.href = url;
+        }
+        setTimeout(() => URL.revokeObjectURL(url), 60_000);
+      },
+      error: err => {
+        onglet?.close();
+        onError(err);
+      }
+    });
+  }
 }

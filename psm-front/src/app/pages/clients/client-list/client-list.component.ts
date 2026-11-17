@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PageTitleComponent } from '../../../shared/page-title/page-title.component';
+import { ClientLogoComponent } from '../../../shared/client-logo/client-logo.component';
 import { ClientService } from '../../../core/services/client.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -11,7 +12,7 @@ import { Client } from '../../../core/models/client.model';
 @Component({
   selector: 'app-client-list',
   standalone: true,
-  imports: [PageTitleComponent, RouterLink, FormsModule],
+  imports: [PageTitleComponent, RouterLink, FormsModule, ClientLogoComponent],
   templateUrl: './client-list.component.html'
 })
 export class ClientListComponent implements OnInit {

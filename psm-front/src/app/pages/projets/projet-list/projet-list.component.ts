@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { forkJoin } from 'rxjs';
 import { PageTitleComponent } from '../../../shared/page-title/page-title.component';
+import { ClientLogoComponent } from '../../../shared/client-logo/client-logo.component';
 import { ProjetService } from '../../../core/services/projet.service';
 import { ClientService } from '../../../core/services/client.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -15,7 +16,7 @@ import { Client } from '../../../core/models/client.model';
 @Component({
   selector: 'app-projet-list',
   standalone: true,
-  imports: [PageTitleComponent, RouterLink, FormsModule, DecimalPipe],
+  imports: [PageTitleComponent, RouterLink, FormsModule, DecimalPipe, ClientLogoComponent],
   templateUrl: './projet-list.component.html'
 })
 export class ProjetListComponent implements OnInit {
@@ -46,6 +47,10 @@ export class ProjetListComponent implements OnInit {
       next: ({ p, c }) => { this.projets.set(p); this.clients.set(c); this.loading.set(false); },
       error: err => { this.loading.set(false); this.notif.httpError(err); }
     });
+  }
+
+  ouvrirPdf(p: Projet): void {
+    this.projetService.ouvrirCahierCharges(p.id!, () => this.notif.error("Impossible d'ouvrir le PDF"));
   }
 
   async delete(p: Projet): Promise<void> {

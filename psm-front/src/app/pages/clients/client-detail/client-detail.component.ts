@@ -3,6 +3,8 @@ import { DecimalPipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { PageTitleComponent } from '../../../shared/page-title/page-title.component';
+import { ClientLogoComponent } from '../../../shared/client-logo/client-logo.component';
+import { ProjetService } from '../../../core/services/projet.service';
 import { ClientService } from '../../../core/services/client.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -13,7 +15,7 @@ import { Projet } from '../../../core/models/projet.model';
 @Component({
   selector: 'app-client-detail',
   standalone: true,
-  imports: [PageTitleComponent, RouterLink, DecimalPipe],
+  imports: [PageTitleComponent, RouterLink, DecimalPipe, ClientLogoComponent],
   templateUrl: './client-detail.component.html'
 })
 export class ClientDetailComponent implements OnInit {
@@ -25,7 +27,12 @@ export class ClientDetailComponent implements OnInit {
   budgetTotal = computed(() => this.projets().reduce((s, p) => s + (p.budget ?? 0), 0));
 
   constructor(private clientService: ClientService, public auth: AuthService,
-              private notif: NotificationService, private router: Router) {}
+              private notif: NotificationService, private router: Router,
+              private projetService: ProjetService) {}
+
+  ouvrirPdf(p: Projet): void {
+    this.projetService.ouvrirCahierCharges(p.id!, () => this.notif.error("Impossible d'ouvrir le PDF"));
+  }
 
   ngOnInit(): void {
     forkJoin({ c: this.clientService.getById(+this.id), p: this.clientService.getProjets(+this.id) })

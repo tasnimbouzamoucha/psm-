@@ -36,9 +36,7 @@
                   <td class="text-muted">{{ c.id }}</td>
                   <td>
                     <div class="d-flex align-items-center">
-                      <div class="avatar-xs me-2">
-                        <span class="avatar-title rounded-circle bg-soft-info text-info fs-13">{{ c.nom.charAt(0) }}</span>
-                      </div>
+                      <app-client-logo [client]="c" [size]="36" class="me-2"></app-client-logo>
                       <a [routerLink]="['/clients', c.id]" class="fw-medium link-primary">{{ c.nom }}</a>
                     </div>
                   </td>

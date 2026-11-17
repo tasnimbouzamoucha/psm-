@@ -32,10 +32,43 @@
               <label class="form-label">Adresse</label>
               <input class="form-control" formControlName="adresse" placeholder="Ville, rue...">
             </div>
+
+            <!-- Logo du client -->
+            <div class="col-12 mb-3">
+              <label class="form-label">Logo du client</label>
+              <div class="d-flex align-items-center gap-3">
+                <div class="border rounded bg-light d-flex align-items-center justify-content-center flex-shrink-0"
+                     style="width: 96px; height: 96px; overflow: hidden">
+                  @if (preview) {
+                    <img [src]="preview" alt="Aperçu du logo" style="max-width: 100%; max-height: 100%; object-fit: contain">
+                  } @else if (logoActuel && !supprimerLogo) {
+                    <img [src]="clientService.logoUrl(+id!)" alt="Logo actuel" style="max-width: 100%; max-height: 100%; object-fit: contain">
+                  } @else {
+                    <i class="ri-image-line fs-1 text-muted"></i>
+                  }
+                </div>
+                <div class="flex-grow-1">
+                  <input #logoInput type="file" class="form-control" id="logo"
+                         accept="image/png,image/jpeg,image/gif,image/webp" (change)="onLogoChange($event)">
+                  <div class="form-text">PNG, JPG, GIF ou WEBP — 2 Mo maximum.</div>
+                  @if (logoErreur) { <div class="text-danger fs-12 mt-1">{{ logoErreur }}</div> }
+                  @if (supprimerLogo) {
+                    <div class="text-warning fs-12 mt-1">Le logo actuel sera retiré à l'enregistrement.
+                      <a href="javascript:void(0)" (click)="supprimerLogo = false">Annuler</a></div>
+                  }
+                  @if (preview || (logoActuel && !supprimerLogo)) {
+                    <button type="button" class="btn btn-sm btn-soft-danger mt-2" (click)="retirerLogo(logoInput)">
+                      <i class="ri-delete-bin-line align-bottom"></i> Retirer le logo
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
           </div>
           <div class="hstack gap-2 justify-content-end mt-2">
             <a routerLink="/clients" class="btn btn-light">Annuler</a>
             <button type="submit" class="btn btn-success" [disabled]="saving">
+              @if (saving) { <span class="spinner-border spinner-border-sm me-1"></span> }
               <i class="ri-save-line align-bottom me-1"></i> {{ isEdit ? 'Enregistrer' : 'Ajouter' }}
             </button>
           </div>
