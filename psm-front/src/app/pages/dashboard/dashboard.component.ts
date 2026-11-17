@@ -3,6 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { PageTitleComponent } from '../../shared/page-title/page-title.component';
+import { ClientLogoComponent } from '../../shared/client-logo/client-logo.component';
 import { ClientService } from '../../core/services/client.service';
 import { ProjetService } from '../../core/services/projet.service';
 import { AuthService } from '../../core/services/auth.service';
@@ -12,7 +13,7 @@ import { Projet } from '../../core/models/projet.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [PageTitleComponent, RouterLink, DecimalPipe],
+  imports: [PageTitleComponent, RouterLink, DecimalPipe, ClientLogoComponent],
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
@@ -30,6 +31,10 @@ export class DashboardComponent implements OnInit {
 
   constructor(private clientService: ClientService, private projetService: ProjetService,
               public auth: AuthService) {}
+
+  ouvrirPdf(p: Projet): void {
+    this.projetService.ouvrirCahierCharges(p.id!, () => {});
+  }
 
   ngOnInit(): void {
     forkJoin({ clients: this.clientService.getAll(), projets: this.projetService.getAll() })
